@@ -1,0 +1,25 @@
+{
+  "name": "itmmportalbot",
+  "version": "0.1.0",
+  "description": "mirror",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SoNiceElijah/ItmmPortalBot.git"
+  },
+  "author": "SoNiceElijah",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SoNiceElijah/ItmmPortalBot/issues"
+  },
+  "homepage": "https://github.com/SoNiceElijah/ItmmPortalBot#readme",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "mongoose": "^5.10.8",
+    "node-vk-bot-api": "^3.3.7",
+    "yaml": "^1.10.0"
+  }
+}
