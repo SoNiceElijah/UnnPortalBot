@@ -1,6 +1,6 @@
 {
   "name": "unnportalbot",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "mirror",
   "main": "bot.js",
   "scripts": {

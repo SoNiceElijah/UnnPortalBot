@@ -7,6 +7,21 @@ const LEC_TYPES = [
     "Лабораторная"
 ];
 
+const MONTHS = [
+    'Янв',
+    'Фев',
+    'Мар',
+    'Апр',
+    'Май',
+    'Июн',
+    'Июл',
+    'Авг',
+    'Сен',
+    'Окт',
+    'Ноя',
+    'Дек'
+]
+
 const BASE_URL = "https://portal.unn.ru/ruzapi/";
 async function exec(method, option, querry) {
 
@@ -81,20 +96,31 @@ function buildDateString(date) {
 }
 
 function smallModels(e) {
-    return {
+
+    let d = e.date.split('.');
+    let obj = {
         from : e.beginLesson,
         to : e.endLesson,
         num : e.lessonNumberStart,
         type : LEC_TYPES.indexOf(e.kindOfWork),
         name : e.discipline,
+        rootname : e.discipline.match(/[^\)]+(\(|$)/gu).join('').replace(/\(/gu,''),
         teacher : e.lecturer,
         place : e.auditorium,
         building : e.building,
         sub : e.subGroup,
         date : e.date,
         day : e.dayOfWeekString,
-        dnum : e.dayOfWeek
+        dnum : e.dayOfWeek,
+        short : e.discipline
+            .match(/[^\)]+(\(|$)/gu).join('').replace(/\(/gu,'')
+            .match(/(?<=[\s,.:;"']|^)[а-яА-Я]/gu).join('')
+            .toUpperCase(),
+        readabledate : d[2].replace(/^0+/g,'') + ' ' + MONTHS[parseInt(d[1], 10) - 1] + ' ' + d[0] 
+
     };
+
+    return obj;
 }
 
 function makeViewModel(block) {
@@ -104,12 +130,14 @@ function makeViewModel(block) {
 
     for(let part of block)
     {
+        part = part.map(smallModels);
         let first = part[0];
         let info = {
-            day : first.dayOfWeekString,
+            day : first.day,
             date : first.date,
             today : first.date === buildDateString(new Date()),
-            content : part.map(smallModels)
+            readabledate : first.readabledate,
+            content : part
         }
 
         model.push(info);
@@ -120,6 +148,17 @@ function makeViewModel(block) {
 
 
 
+}
+
+function filterByName(name) {
+    name = name.toUpperCase().trim();
+    return function(e) {
+        return e.name.toUpperCase().trim() === name
+            || e.short.trim() === name
+            || e.rootname.toUpperCase().trim() === name
+            || e.teacher.trim().toUpperCase() === name
+            || e.teacher.split(' ')[0].trim().toUpperCase() === name
+        }
 }
 
 // Time table by group id
@@ -171,7 +210,8 @@ class TTGroup {
         to.setDate(to.getDate() + 7 + 6);
 
         let data =  await timetable(this.type, this.gid, from, to);
-        let filtered = data.filter(e => e.discipline.toUpperCase() === name.toUpperCase()).map(smallModels);
+        let filtered = data.map(smallModels);
+        filtered = filtered.filter(filterByName(name));
         filtered = filtered.map((e) => {
 
             let today = new Date(this.time);
@@ -196,7 +236,8 @@ class TTGroup {
         to.setDate(to.getDate() + 7 + 6);
 
         let data =  await timetable(this.type, this.gid, from, to);
-        let filtered = data.filter(e => e.discipline.toUpperCase() === name.toUpperCase()).map(smallModels);
+        let filtered = data.map(smallModels);
+        filtered = filtered.filter(filterByName(name));
 
         let obj = {};
         if(!filtered.length) return null;

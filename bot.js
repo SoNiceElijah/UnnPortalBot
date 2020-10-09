@@ -48,6 +48,16 @@ async function main() {
     });
 
     bot.use((ctx,next) => {
+        if( ctx.message.text === '' 
+            && ctx.message.attachments.length === 1
+            && ctx.message.attachments[0].type === 'sticker')
+        {
+            return ctx.reply("Я не понимаю стикеры... &#128532;")
+        }
+        next();
+    })
+
+    bot.use((ctx,next) => {
         let s = special.specialAnswers(ctx);
         if(s) return ctx.reply(s);
         next();
@@ -172,7 +182,7 @@ async function main() {
     });
 
     bot.use((ctx,next) => {
-        ctx.reply('Такой команды нет...');
+        ctx.reply('Проверь тут что я умею', null, keyboards.commands);
     });
 
     bot.startPolling(() => { console.log(`OnLiNe ${config.vkgroup}`);  });
