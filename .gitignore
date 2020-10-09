@@ -104,3 +104,7 @@ dist
 .tern-port
 
 config.yaml
+
+special.js
+
+test.json
