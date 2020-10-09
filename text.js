@@ -3,6 +3,9 @@
 
 // &#12288; - проебл
 
+const { version } = require('./package.json');
+
+
 const yaml = require('yaml'); 
 const fs = require('fs');
 const config = yaml.parse(fs.readFileSync('config.yaml','utf-8'));
@@ -19,13 +22,15 @@ function createMsg(model) {
         if(n >= 10) { output += '<=>'; n = 0}
 
         let text = 
-        `${e.today ? '&#11088;' : '&#128198;'} [${e.date}] ${e.day}\n` +
+        `${e.today ? '&#11088;' : '&#128198;'} [${e.readabledate}] ${e.day}\n` +
         `--------------------------------\n\n` +
         `${e.content.map(fromElement).join('')}\n\n`;
 
         output += text;
         ++n;
     }
+
+    if(output === '') output = "Нет пар"
 
     return output;
 
@@ -72,7 +77,7 @@ function createWhenMsg(model) {
         if(line.distance === 0) w = "Сегодня";
         else if(line.distance === 1) w = "Завтра";
         else if(line.distance < 5) w = `Через ${line.distance} дня`;
-        else w = `Через ${line.distance} дней [${line.date}]`;  
+        else w = `Через ${line.distance} дней [${line.readabledate}][${line.day}]`;  
 
         let text = 
         `${types[line.type]} ${w} в ${line.from} ${line.sub ? '/// ' + line.sub : ''}\n`;
@@ -113,8 +118,8 @@ function getCommandList() {
         + `\n&#10133; [Неделя] = Расписание на неделю`
         + `\n&#10133; [Все] = Расписание на 2 недели вперед (включая текущую)`
 
-        + `\n\n&#10134; [Когда <полное название предмета>] = Когда будет предмет в обозримом будущем (на 2 недели вперед)`
-        + `\n&#10134; [Где <полное название предмета>] = Где нужно искать пару`
+        + `\n\n&#10133; [Когда <полное название предмета>] = Когда будет предмет в обозримом будущем (на 2 недели вперед)`
+        + `\n&#10133; [Где <полное название предмета>] = Где нужно искать пару`
 
         + `\n\n&#10133; [Группа <код группы как на портале>] = Устанавливает группу, за расписанием которой ты следишь.`
 
@@ -137,7 +142,7 @@ function getInformation() {
     let text = 
 
         `..::UNN BOT::..`
-        + `\n${config.version}`
+        + `\n${version}`
 
         + `\n\nБот предоставляет инфу о расписании, основываясь на данных с портала unn`
 
