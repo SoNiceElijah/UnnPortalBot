@@ -22,7 +22,7 @@ jobs:
           command: |
             cd ${{ secrets.DEPLOY_DIR }}
             git fetch --all
-            git reset --hard origin/master
+            git reset --hard origin/main
             npm i
             pm2 reload bot
     
