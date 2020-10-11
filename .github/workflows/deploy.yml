@@ -1,0 +1,28 @@
+
+
+name: Deploy
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+
+    name: Deploy_bot 
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: connect
+        uses: garygrossgarten/github-action-ssh@v0.5.0
+        with:
+          privateKey: ${{ secrets.DEPLOY_KEY }}
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          command: |
+            cd ${{ secrets.DEPLOY_DIR }}
+            git fetch --all
+            git reset --hard origin/main
+            npm i
+            pm2 reload bot
+    
