@@ -21,6 +21,8 @@ COMMANDS = COMMANDS.commands;
 
 let LOCAL = yaml.parse(fs.readFileSync(path.resolve(__dirname,'local','ru_RU.yaml'),'utf-8'));
 
+process.env.TZ = 'Europe/Moscow' 
+
 main();
 async function main() {
 
