@@ -2,9 +2,9 @@
 const axios = require('axios');
 
 const LEC_TYPES = [
-    "Лекция",
-    "Практика",
-    "Лабораторная"
+    262,
+    264,
+    263
 ];
 
 const MONTHS = [
@@ -102,7 +102,7 @@ function smallModels(e) {
         from : e.beginLesson,
         to : e.endLesson,
         num : e.lessonNumberStart,
-        type : LEC_TYPES.indexOf(e.kindOfWork),
+        type : LEC_TYPES.indexOf(e.kindOfWorkOid),
         name : e.discipline,
         rootname : e.discipline.match(/[^\)]+(\(|$)/gu).join('').replace(/\(/gu,''),
         teacher : e.lecturer,
@@ -114,7 +114,7 @@ function smallModels(e) {
         dnum : e.dayOfWeek,
         short : e.discipline
             .match(/[^\)]+(\(|$)/gu).join('').replace(/\(/gu,'')
-            .match(/(?<=[\s,.:;"']|^)[а-яА-Я]/gu).join('')
+            .match(/(?<=[\s,.:;"']|^)([а-яА-Я]|[a-zA-Z])/gu).join('')
             .toUpperCase(),
         readabledate : d[2].replace(/^0+/g,'') + ' ' + MONTHS[parseInt(d[1], 10) - 1] + ' ' + d[0] 
 
@@ -263,6 +263,10 @@ class TTGroup {
 
         return obj;
 
+    }
+
+    async date(date) {
+        return await timetable(this.type, this.gid, date);
     }
 
 }

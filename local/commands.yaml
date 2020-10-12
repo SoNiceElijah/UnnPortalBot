@@ -1,0 +1,68 @@
+commands:
+  group:
+    triggers:
+      - группа
+      - group
+  hi:
+    triggers:
+      - привет
+      - hi
+      - начать
+      - start
+  commands:
+    triggers:
+      - команды
+      - commands
+  information:
+    triggers:
+      - информация
+      - information
+  portal:
+    triggers:
+      - портал
+      - portal
+  bug:
+    triggers:
+      - "#bug"
+  info:
+    triggers:
+      - "#info"
+  help:
+    triggers:
+      - "#help"
+  keysup:
+    triggers:
+      - "~+"
+  keysdown:
+    triggers:
+      - "~-"
+  today:
+    triggers:
+      - сегодня
+      - today
+  tommorow:
+    triggers:
+      - завтра
+      - tommorow
+  week:
+    triggers:
+      - неделя
+      - week
+  week2:
+    triggers:
+      - все
+      - all
+  when:
+    triggers:
+      - когда
+      - when
+  where:
+    triggers:
+      - где
+      - where 
+  date:
+    triggers:
+      - дата
+      - date
+    
+

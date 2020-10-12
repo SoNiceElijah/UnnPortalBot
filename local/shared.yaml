@@ -1,0 +1,17 @@
+marks_big :
+  - "&#128215;"
+  - "&#128217;"
+  - "&#128216;"
+marks_big_undef : "&#128211;"
+marks_small :
+  - "&#127797;"
+  - "&#128312;"
+  - "&#128313;"
+marks_small_undef : "&#9642;"
+logo : "..::UNN BOT::.."
+today : '&#11088;'
+date : '&#128198;'
+mark_neutral : "&#128681;"
+space : "&#12288;"
+
+command_list : "&#8252;"

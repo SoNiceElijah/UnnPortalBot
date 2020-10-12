@@ -10,7 +10,8 @@ const yaml = require('yaml');
 const fs = require('fs');
 const config = yaml.parse(fs.readFileSync('config.yaml','utf-8'));
 
-const SPACE = "&#12288;";
+const TXS = yaml.parse(fs.readFileSync('./local/shared.yaml','utf-8'));
+const SPACE = TXS.space;
 
 function createMsg(model) {
 
@@ -22,8 +23,8 @@ function createMsg(model) {
         if(n >= 10) { output += '<=>'; n = 0}
 
         let text = 
-        `${e.today ? '&#11088;' : '&#128198;'} [${e.readabledate}] ${e.day}\n` +
-        `--------------------------------\n\n` +
+        `${e.today ? TXS.today : TXS.date } [${e.readabledate}] ${e.day}\n` +
+        `////////////////////////////\n\n` +
         `${e.content.map(fromElement).join('')}\n\n`;
 
         output += text;
@@ -38,19 +39,11 @@ function createMsg(model) {
 
 function fromElement(e) {
 
-    let types = {
-        '0' : "&#128215;",
-        '1' : "&#128217;",
-        '2' : "&#128216;",
-        '-1' : "&#128211;"
-    }
+    let types = TXS.marks_big;
+    types['-1'] = TXS.marks_big_undef;
 
-    let mark = {
-        '0' : "&#127797;",
-        '1' : "&#128312;",
-        '2' : "&#128313;",
-        '-1' : "&#9642;"
-    }
+    let mark = TXS.marks_small;
+    mark['-1'] = TXS.marks_small_undef;
 
     let text = 
     `${types[e.type]} ${e.from} - ${e.to} ${e.sub ? '/// ' + e.sub : ''}\n` +
@@ -64,12 +57,9 @@ function fromElement(e) {
 function createWhenMsg(model) {
 
     let output = `${model[0].name}:\n`;
-    let types = {
-        '0' : "&#127797;",
-        '1' : "&#128312;",
-        '2' : "&#128313;",
-        '-1' : "&#9642;"
-    }
+    
+    let types = TXS.marks_small;
+    types['-1'] = TXS.marks_small_undef;
 
     for(let line of model)
     {
@@ -90,12 +80,9 @@ function createWhenMsg(model) {
 
 function createWhereMsg(model) {
     let output = '';
-    let types = {
-        '0' : "&#127797;",
-        '1' : "&#128312;",
-        '2' : "&#128313;",
-        '-1' : "&#9642;"
-    }
+
+    let types = TXS.marks_small;
+    types['-1'] = TXS.marks_small_undef;
 
     if(model.type0) { output += 'Лекции'; for(let str of model.type0) output += `\n${types['0']} ${str}`; }
     if(model.type1) { output += '\n\nПрактики'; for(let str of model.type1) output += `\n${types['1']} ${str}`; }
@@ -108,30 +95,33 @@ function createWhereMsg(model) {
 
 function getCommandList() {
     let text = 
-        `&#8252; Список команд` 
+        `${TXS.command_list} Список команд`
 
-        + `\n\n&#10133; - такая команда есть и точно работает`
-        + `\n&#10134; - я такое умею в теории, но могут быть проблемы с исполнением`
+        + `\n\n${TXS.mark_neutral} [Сегодня] = Расписание на сегодня`
+        + `\n${TXS.mark_neutral} [Завтра] = Расписание на завтра`
+        + `\n${TXS.mark_neutral} [Неделя] = Расписание на неделю`
+        + `\n${TXS.mark_neutral} [Все] = Расписание на 2 недели вперед (включая текущую)`
+        + `\n${TXS.mark_neutral} [Дата <дата MM.DD.YYYY или DD Mon YYYY>] = Расписание на 2 недели вперед (включая текущую)`
 
-        + `\n\n&#10133; [Сегодня] = Расписание на сегодня`
-        + `\n&#10133; [Завтра] = Расписание на завтра`
-        + `\n&#10133; [Неделя] = Расписание на неделю`
-        + `\n&#10133; [Все] = Расписание на 2 недели вперед (включая текущую)`
+        + `\n\n${TXS.mark_neutral} [Когда <полное название предмета>] = Когда будет предмет в обозримом будущем (на 2 недели вперед)`
+        + `\n${TXS.mark_neutral} [Где <полное название предмета>] = Где нужно искать пару`
 
-        + `\n\n&#10133; [Когда <полное название предмета>] = Когда будет предмет в обозримом будущем (на 2 недели вперед)`
-        + `\n&#10133; [Где <полное название предмета>] = Где нужно искать пару`
+        + `\n\n${TXS.mark_neutral} [Группа <код группы как на портале>] = Устанавливает группу, за расписанием которой ты следишь.`
 
-        + `\n\n&#10133; [Группа <код группы как на портале>] = Устанавливает группу, за расписанием которой ты следишь.`
+        + `\n\n${TXS.mark_neutral} [Команды] = Список доступных команд`
+        + `\n${TXS.mark_neutral} [Информация] = Информация о том, что тут вообще творится`
 
-        + `\n\n&#10133; [Команды] = Список доступных команд`
-        + `\n&#10133; [Информация] = Информация о том, что тут вообще творится`
+        + `\n\n${TXS.mark_neutral} [~+] = Поднимает клавиатуру`
+        + `\n${TXS.mark_neutral} [~-] = Убирает клавиатуру`
 
-        + `\n\n&#10133; [~+] = Поднимает клавиатуру`
-        + `\n&#10133; [~-] = Убирает клавиатуру`
+        + `\n\n${TXS.mark_neutral} [#bug <сообщение>] = Что-то сломалось`
+        + `\n${TXS.mark_neutral} [#info <сообщение>] = Хочешь нам что-то сообщить? Давай`
+        + `\n${TXS.mark_neutral} [#help <сообщение>] = Нужна помощь? Напиши эту команду, и админы придут на помощь, наверное... (вряд ли)`
 
-        + `\n\n&#10133; [#bug <сообщение>] = Что-то сломалось`
-        + `\n&#10133; [#info <сообщение>] = Хочешь нам что-то сообщить? Давай`
-        + `\n&#10133; [#help <сообщение>] = Нужна помощь? Напиши эту команду, и админы придут на помощь, наверное... (вряд ли)`
+        + `\n\nПримеры сложных команд, до которых никто не допирает:`
+        + `\n${TXS.marks_small[1]}Группа 382003-2 <===> Меняет группу на 382003-2`
+        + `\n${TXS.marks_small[1]}Дата 20 sep 2020 <===> Показывает расписание в этот день (дата ток на английском работает)`
+        + `\n${TXS.marks_small[1]}Дата 10.20.2020 <===> Расписание на 20 октября, а не то что ты подумал(а)!`   
 
         + `\n\nМожешь еще посмотреть на информацию. Не зря ж я ее писал пол ночи.`
 
@@ -141,7 +131,7 @@ function getCommandList() {
 function getInformation() {
     let text = 
 
-        `..::UNN BOT::..`
+        `${TXS.logo}`
         + `\n${version}`
 
         + `\n\nБот предоставляет инфу о расписании, основываясь на данных с портала unn`
