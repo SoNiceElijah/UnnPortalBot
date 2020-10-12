@@ -200,7 +200,7 @@ async function main() {
     });
 
     bot.command("/time", async(ctx) => {
-        ctx.reply(new Date(ctx.message.date * 1000));
+        ctx.reply((new Date(ctx.message.date * 1000)) + '');
     });
 
     bot.use((ctx,next) => {
