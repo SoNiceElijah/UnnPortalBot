@@ -199,6 +199,10 @@ async function main() {
         ctx.reply(LOCAL.delete_cmnd);
     });
 
+    bot.command("/time", async(ctx) => {
+        ctx.reply(new Date(ctx.message.date * 1000));
+    });
+
     bot.use((ctx,next) => {
         ctx.reply(LOCAL.cmnd_not_found, null, keyboards.commands);
     });
