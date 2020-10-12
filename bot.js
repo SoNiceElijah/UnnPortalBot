@@ -194,6 +194,11 @@ async function main() {
         ctx.reply(editor.createMsg(model));
     });
 
+    bot.command(COMMANDS.remove.triggers, async(ctx) => {
+        await ctx.user.delete();
+        ctx.reply(LOCAL.delete_cmnd);
+    });
+
     bot.use((ctx,next) => {
         ctx.reply(LOCAL.cmnd_not_found, null, keyboards.commands);
     });

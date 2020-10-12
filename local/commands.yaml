@@ -64,5 +64,7 @@ commands:
     triggers:
       - дата
       - date
-    
-
+  remove:
+    triggers:
+      - забудь
+      - delete
