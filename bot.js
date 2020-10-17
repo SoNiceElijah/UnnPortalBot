@@ -72,6 +72,21 @@ async function main() {
         next();
     })
 
+    bot.command('switch', async(ctx) => {
+        let name = ctx.message.text.substring(6).trim().toUpperCase();
+        if(name == "RU") {
+            ctx.user.lng = 1;
+            ctx.user.save();
+            return ctx.reply("Language set to RU");
+        }
+        if(name == "EN") {
+            ctx.user.lng = 2;
+            ctx.user.save();
+            return ctx.reply("Language set to EN");
+        }
+        return ctx.reply("Language mode not found");
+    });
+
     bot.command(COMMANDS.group.triggers, async (ctx) => {
         let gname = ctx.message.text.substring(6).trim();
         if(!gname) return ctx.reply(LOCAL.group_wrong_cmnd)
@@ -81,7 +96,7 @@ async function main() {
         ctx.user.gid = gid;
         ctx.user.gname = gname;
         await ctx.user.save();
-        ctx.reply(LOCAL.group_changed, null, keyboards.main);
+        ctx.reply(LOCAL.group_changed, null, keyboards.main());
     })
 
     bot.command(COMMANDS.hi.triggers, async(ctx) => {
@@ -91,11 +106,11 @@ async function main() {
     });
 
     bot.command(COMMANDS.commands.triggers, async(ctx) => {
-        ctx.reply(editor.getCommandList(), null, keyboards.info);
+        ctx.reply(editor.getCommandList(), null, keyboards.info());
     });
 
     bot.command(COMMANDS.information.triggers, async(ctx) => {
-        ctx.reply(editor.getInformation(), null, keyboards.commands);
+        ctx.reply(editor.getInformation(), null, keyboards.commands());
     });
 
     bot.command(COMMANDS.portal.triggers, async (ctx) => {
@@ -115,11 +130,11 @@ async function main() {
     });
 
     bot.command(COMMANDS.keysup.triggers, async (ctx) => {
-        ctx.reply('&#128071;', null, keyboards.main);
+        ctx.reply('&#128071;', null, keyboards.main());
     });
 
     bot.command(COMMANDS.keysdown.triggers, async (ctx) => {
-        ctx.reply('&#128077;', null, keyboards.none);
+        ctx.reply('&#128077;', null, keyboards.none());
     });
 
     bot.use((ctx,next) => {
@@ -206,7 +221,7 @@ async function main() {
     });
 
     bot.use((ctx,next) => {
-        ctx.reply(LOCAL.cmnd_not_found, null, keyboards.commands);
+        ctx.reply(LOCAL.cmnd_not_found, null, keyboards.commands());
     });
 
     bot.startPolling(() => { console.log(`OnLiNe ${config.vkgroup}`);  });

@@ -8,6 +8,7 @@ const model = {
     vkid : Number,
     gid : Number,
     gname : String,
+    lng : { type: Number, default: 1 }
 }
 
 const schema = new mongoose.Schema(model);
