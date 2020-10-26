@@ -8,20 +8,22 @@ const path = require('path');
 
 const mongoose = require('mongoose');
 
-const User = require('./user');
-const portal = require('./portal');
-const editor = require('./text');
+const User = require('./db/user');
+const portal = require('./lib/portal');
+const editor = require('./lib/text');
 
-const keyboards = require('./keyboards');
+const keyboards = require('./lib/keyboards');
 
-const special = require('./special');
+const special = require('./lib/special');
 
 let COMMANDS = yaml.parse(fs.readFileSync(path.resolve(__dirname,'local','commands.yaml'),'utf-8'));
 COMMANDS = COMMANDS.commands;
 
 let LOCAL = yaml.parse(fs.readFileSync(path.resolve(__dirname,'local','ru_RU.yaml'),'utf-8'));
 
-process.env.TZ = 'Europe/Moscow' 
+process.env.TZ = 'Europe/Moscow';
+
+const backend = require('./application/backend');
 
 main();
 async function main() {
@@ -225,5 +227,6 @@ async function main() {
     });
 
     bot.startPolling(() => { console.log(`OnLiNe ${config.vkgroup}`);  });
+    backend.listen(config.httpport,() => { console.log(`BacKEnD UP ${config.httpport}`); })
 
 }

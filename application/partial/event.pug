@@ -1,0 +1,12 @@
+.grid-events
+    .events-list
+        each event in e
+            .event-item
+                .event-finished
+                    .event-fn-loader(style="height:"+event.pproc+"%;")
+                .event-main
+                    .event-title= event.title
+                    .event-desc= event.desc
+                    .event-progress
+                        .event-pr-loader(style="width:"+event.proc+"%;")
+                

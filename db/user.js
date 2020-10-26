@@ -1,7 +1,4 @@
 
-// Это дата маппер на самом деле
-// Вот это неожиданно
-
 const mongoose = require('mongoose');
 
 const model = {
