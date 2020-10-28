@@ -23,8 +23,6 @@ let LOCAL = yaml.parse(fs.readFileSync(path.resolve(__dirname,'local','ru_RU.yam
 
 process.env.TZ = 'Europe/Moscow';
 
-const backend = require('./application/backend');
-
 main();
 async function main() {
 
@@ -227,6 +225,5 @@ async function main() {
     });
 
     bot.startPolling(() => { console.log(`OnLiNe ${config.vkgroup}`);  });
-    backend.listen(config.httpport,() => { console.log(`BacKEnD UP ${config.httpport}`); })
 
 }
