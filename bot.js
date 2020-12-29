@@ -225,5 +225,4 @@ async function main() {
     });
 
     bot.startPolling(() => { console.log(`OnLiNe ${config.vkgroup}`);  });
-
 }
