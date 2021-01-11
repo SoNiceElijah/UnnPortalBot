@@ -60,6 +60,10 @@ commands:
     triggers:
       - где
       - where 
+  exams:
+    triggers:
+      - экзамены
+      - exams
   date:
     triggers:
       - дата

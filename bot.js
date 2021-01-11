@@ -211,6 +211,13 @@ async function main() {
         ctx.reply(editor.createMsg(model));
     });
 
+    bot.command(COMMANDS.exams.triggers, async (ctx) => {
+        let tt = new portal.TTGroup(ctx.user.gid,ctx.message.date);
+        let info = await tt.exams();
+        let model = portal.makeViewModel(info);
+        ctx.reply(editor.createExamMsg(model));
+    });
+
     bot.command(COMMANDS.remove.triggers, async(ctx) => {
         await ctx.user.delete();
         ctx.reply(LOCAL.delete_cmnd);
