@@ -100,9 +100,9 @@ async function main() {
     })
 
     bot.command(COMMANDS.hi.triggers, async(ctx) => {
-        if(ctx.user.gid) return ctx.reply( LOCAL.hi_authorized + ctx.user.gname,null, keyboards.main);
+        if(ctx.user.gid) return ctx.reply( LOCAL.hi_authorized + ctx.user.gname,null, keyboards.main());
         let text = LOCAL.hi_not_authorized;
-        ctx.reply(text, null, keyboards.hello);
+        ctx.reply(text, null, keyboards.hello());
     });
 
     bot.command(COMMANDS.commands.triggers, async(ctx) => {
